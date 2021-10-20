@@ -13,7 +13,7 @@ ampl_u = 0.5
 ampl_y = []
 phase = []
 
-# Reading the files
+# Reading the files (with regular expressions!! :))
 for file in glob.glob("*.mat"):
     mat = scipy.io.loadmat(file)
     match = re.match(r"w(\d+)_(\d+)_(\d).mat", file)
