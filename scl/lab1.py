@@ -24,6 +24,8 @@ for file in glob.glob("*.mat"):
         results[int(match[1])] = result
         freqs[int(match[1])] = freq
 
+print(results[0])
+
 # Sinus function for curvefitting
 def sinus(t, a, w, phi, b):
     return a * np.sin(w*t + phi) + b
