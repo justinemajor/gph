@@ -75,7 +75,7 @@ fig4.savefig('Nyquist')
 # Setting important variables: gain and phase
 ampl_y = np.array(ampl_y)
 gain = 20 * np.log10(ampl_y / ampl_u)
-# phase = (np.array(phase))*180/2/np.pi
+# phase = (np.array(phase))*360/2/np.pi
 phase = np.degrees(phase)
 
 # Bode diagrams (Phase & gain)
