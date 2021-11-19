@@ -32,7 +32,7 @@ for file in glob.glob("*.txt"):
     doIt = 0
 
 fig, ax = mpl.subplots(1)
-ax.plot(t, u, label="$V_a$")
+ax.plot(t, u, label="$V_{wf}$ expérimental")
 ax.plot(t, y_exp[1], label="$V_{wf}$ obtenu avec IdentSyst")
 ax.plot(t, y_th[1], label="$V_{wf}$ théorique")
 ax.legend()
