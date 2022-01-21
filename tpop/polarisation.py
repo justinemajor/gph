@@ -52,30 +52,40 @@ def rp(theta1, n2):
 x = np.linspace(0, np.pi/2, 1000)
 
 coefRef, ref = mpl.subplots(1)
-ref.plot(np.degrees(x), rs(x, 1.495), label="TE")
-ref.plot(np.degrees(x), rp(x, 1.495), label="TM")
-ref.set_xlabel(f"Angle d'incidence [{degreeSign}]")
-ref.set_ylabel("Intensité relative de l'onde réfléchie")
-ref.plot(angle, 0, 'ko', label=f"Angle de Brewster à {angle:.2f}{degreeSign}")
 ref.axhline(y=0, color='k')
 ref.axvline(x=0, color='k')
-ref.grid()
+ref.minorticks_on()
+ref.grid(which='major', linestyle='-', linewidth='0.5', color='black')
+ref.grid(which='minor', linestyle=':', linewidth='0.5', color='black')
+ref.plot(np.degrees(x), rs(x, 1.495), label="TE", zorder=5)
+ref.plot(np.degrees(x), rp(x, 1.495), label="TM", zorder=1)
+ref.set_xlabel(f"Angle d'incidence [{degreeSign}]")
+ref.set_ylabel("Intensité relative de l'onde réfléchie [-]")
 
 """Results"""
 deg = np.arange(10, 85, 5)
-deg = np.radians(deg)
 tm = np.array([20.1, 19, 17.4, 15.4, 13, 10.3, 7.2, 4.1, 1.8, 0.05, 2.2, 10.6, 29.8, 71.8, 152.6])
-tm /= 500
 te = np.array([4.1, 5.1, 5.7, 7.2, 5.2, 7.9, 10.3, 14.6, 20.9, 31.4, 87.9, 121.8, 163, 184, 227])
+
+yerror = (0.9/tm + np.array([5/500]*len(tm)))*tm/500
+tm /= 500
+
+y2error = (0.9/te + np.array([5/500]*len(te)))*te/500
 te /= 500
+
+xerror = np.array([2]*len(deg))
+deg = np.radians(deg)
 
 popt, pcov = curve_fit(rp, deg, tm, p0=[2])
 popt2, pcov2 = curve_fit(rs, deg, te, p0=[2])
 
-ref.plot(np.degrees(deg), tm, label="TM expérimental")
-ref.plot(np.degrees(deg), rp(deg, *popt), label=f"curvefit TM, n={popt[0]:.3f}")
-ref.plot(np.degrees(deg), te, label="TE expérimental")
-ref.plot(np.degrees(deg), rs(deg, *popt), label=f"curvefit TE, n={popt2[0]:.3f}")
+ref.plot(np.degrees(deg), tm, "ok", label="TM expérimental", ms=1, zorder=4)
+ref.plot(np.degrees(deg), rp(deg, *popt), label=f"curvefit TM, n={popt[0]:.3f}", zorder=2)
+ref.plot(angle, 0, 'or', label=f"Angle de Brewster théorique à {angle:.2f}{degreeSign}")
+ref.plot(np.degrees(deg), te, "og", ms=1, zorder=8, label="TE expérimental")
+ref.plot(np.degrees(deg), rs(deg, *popt), zorder=6, label=f"curvefit TE, n={popt2[0]:.3f}")
+ref.errorbar(np.degrees(deg), tm, xerr=xerror, yerr=yerror, fmt='none', capsize=2, ecolor='black', zorder=3)
+ref.errorbar(np.degrees(deg), te, xerr=xerror, yerr=yerror, fmt='none', capsize=2, ecolor='grey', zorder=3)
 ref.legend()
 coefRef.savefig("coefficientReflexion")
 
