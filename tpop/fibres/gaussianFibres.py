@@ -59,7 +59,7 @@ mhw = mid1-mid2
 print(mhw)
 
 fig1, xy = mpl.subplots(1)
-xy.plot(x, y, '.', mfc="dimgray", mec="dimgray", label="mesures expérimentales")
+xy.plot(x, y, '.', mfc="dimgray", mec="dimgray", label="données expérimentales")
 xy.plot(x, gauss(x, *popt), 'k', label="courbe gaussienne « fittée »")
 xy.arrow(0, mid-.125, 0, 0.1, color="silver", length_includes_head=True, width=.0005, head_length=.025)
 xy.plot([mid2, mid1], [mid]*2, color="silver", label="diamètre du faisceau laser")
