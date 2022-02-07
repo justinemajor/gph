@@ -6,7 +6,7 @@ import matplotlib.pyplot as mpl
 import glob
 
 
-filePath = glob.glob("*.csv")[0]
+filePath = glob.glob("fibres/*.csv")[0]
 file = open(filePath, 'r')
 results = list(file)
 file.close()
@@ -66,8 +66,8 @@ xy.plot([mid2, mid1], [mid]*2, color="silver", label="diamètre du faisceau lase
 xy.annotate(f"{mhw:.3f} m", [-0.003, 0.3])
 xy.tick_params(axis="y", direction="in")
 xy.tick_params(axis="x", direction="in")
-xy.set_xlabel("Longueur [m]")
+xy.set_xlabel("Distance par rapport au centre d'un faisceau [m]")
 xy.set_ylabel("Intensité lumineuse relative [-]")
 xy.legend()
-fig1.savefig("gaussian.pdf")
+fig1.savefig("fibres/gaussian.pdf")
 # mpl.show()
