@@ -5,10 +5,8 @@ import scipy as sp
 import matplotlib.pyplot as mpl
 import glob
 
-print()
-print(glob.glob("~/Documents/git/gph/design2/*.csv"))
 
-filePath = glob.glob("design2/*.csv")[0]
+filePath = glob.glob("/Users/justinemajor/Documents/git/gph/design2/min.csv")[0]
 file = open(filePath, 'r')
 results = list(file)
 file.close()
@@ -36,10 +34,12 @@ for index, i in enumerate(y1):
 x = np.array(x)
 y = np.array(y)
 
+for index, value in enumerate(y):
+    continue
+
 
 def gauss(x, a, b, x0, sigma, d):
     return a * np.exp(b * (x - x0)**2 / (2 * sigma**2)) + d
-
 
 n = len(x)
 mean = sum(x * y) / n
@@ -65,11 +65,11 @@ xy.plot(x, y, '.', mfc="dimgray", mec="dimgray", label="données expérimentales
 xy.plot(x, gauss(x, *popt), 'k', label="courbe gaussienne « fittée »")
 xy.arrow(0, mid-.125, 0, 0.1, color="silver", length_includes_head=True, width=.0005, head_length=.025)
 xy.plot([mid2, mid1], [mid]*2, color="silver", label="diamètre du faisceau laser")
-xy.annotate(f"{mhw:.3f} m", [-0.003, 0.3])
+xy.annotate(f"{mhw:.3f} mm", [-0.003, 0.3])
 xy.tick_params(axis="y", direction="in")
 xy.tick_params(axis="x", direction="in")
-xy.set_xlabel("Distance par rapport au centre d'un faisceau [m]")
+xy.set_xlabel("Distance par rapport au centre d'un faisceau [mm]")
 xy.set_ylabel("Intensité lumineuse relative [-]")
 xy.legend()
-fig1.savefig("fibres/gaussian.pdf")
-# mpl.show()
+fig1.savefig("/Users/justinemajor/Documents/git/gph/design2/minimum.pdf")
+mpl.show()
