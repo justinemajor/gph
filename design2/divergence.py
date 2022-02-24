@@ -4,6 +4,7 @@ import numpy as np
 diameter = np.array([21.355, 26.402, 30.799])
 rayon = diameter/2
 distance = np.array([38, 38+7.5, 38+2*7.5])
+distance *= 10
 
 angle = []
 
@@ -15,3 +16,6 @@ for ind, i in enumerate(rayon):
 
 angle = np.array(angle)
 moy = np.mean(angle)
+
+print(angle)
+print(moy)
