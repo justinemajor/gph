@@ -1,8 +1,8 @@
 import numpy as np
 
 
-x = 1
-y = 1
+x = 0.5
+y = 0
 z = 20
 r = (x**2+y**2+z**2)**.5
 point = np.array([x, y, z])
@@ -30,7 +30,7 @@ mirror2 = np.array([[-1, 0, 0],
                    [0, -sine2, -cosine2]])
 result = mirror2@mirror1@laser*r
 result = np.round(result, 3)
-print(result)  # Right position!! ;P
+# print(result)  # Right position!! ;P
 # print((result[0]**2+result[1]**2+result[2]**2)**.5/r)
 
 
@@ -40,7 +40,7 @@ matrix = np.round(matrix, 1)
 
 print(matrix)
 
-# alpha = round((180-np.degrees(np.arccos(-x/r)))/2, 1)
-# beta = round((180-np.degrees(np.arccos(-y/(y**2+z**2)**.5)))/2, 1)
+# alpha = round((np.degrees(np.arccos(x/r)))/2, 1)
+# beta = round((np.degrees(np.arccos(y/(y**2+z**2)**.5)))/2, 1)
 # print(alpha, beta)
 # That's it!! ;P
