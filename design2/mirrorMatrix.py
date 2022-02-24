@@ -30,9 +30,9 @@ mirror2 = np.array([[-1, 0, 0],
                    [0, -sine2, -cosine2]])
 result = mirror2@mirror1@laser*r
 result = np.round(result, 3)
-
 print(result)  # Right position!! ;P
 # print((result[0]**2+result[1]**2+result[2]**2)**.5/r)
+
 
 matrix = np.array([[alpha],
                    [beta]])
