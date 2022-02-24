@@ -6,7 +6,7 @@ import matplotlib.pyplot as mpl
 import glob
 
 
-filePath = glob.glob("/Users/justinemajor/Documents/git/gph/design2/min.csv")[0]
+filePath = glob.glob("/Users/justinemajor/Documents/git/gph/design2/diameter3.csv")[0]
 file = open(filePath, 'r')
 results = list(file)
 file.close()
@@ -34,20 +34,44 @@ for index, i in enumerate(y1):
 x = np.array(x)
 y = np.array(y)
 
-for index, value in enumerate(y):
-    continue
+xFiltered = []
+yFiltered = []
+val = 0
 
+top = int(len(y)/2)
+
+for index, value in enumerate(y[:top+1]):
+    if value >= val:
+        val = value
+        xFiltered.append(x[index])
+        yFiltered.append(value)
+
+xSecondHalf = []
+ySecondHalf = []
+
+val = 0
+for index, value in enumerate(y[:top:-1]):
+    if value >= val:  # and not -22<x[index]<-15 (for diameter2)
+        val = value
+        xSecondHalf.append(x[top*2-index-1])
+        ySecondHalf.append(value)
+
+xFiltered += xSecondHalf[::-1]
+yFiltered += ySecondHalf[::-1]
+
+xFiltered = np.array(xFiltered)
+yFiltered = np.array(yFiltered)
 
 def gauss(x, a, b, x0, sigma, d):
     return a * np.exp(b * (x - x0)**2 / (2 * sigma**2)) + d
 
-n = len(x)
-mean = sum(x * y) / n
-sigma = (sum(y * (x - mean) ** 2) / n) ** .5
+n = len(xFiltered)
+mean = sum(xFiltered * yFiltered) / n
+sigma = (sum(yFiltered * (xFiltered - mean) ** 2) / n) ** .5
 
-popt, pcov = curve_fit(gauss, x, y, p0=[1, 1, mean, sigma, 0])
+popt, pcov = curve_fit(gauss, xFiltered, yFiltered, p0=[1, 1, mean, sigma, 0])
 
-maxi = np.max(gauss(x, *popt))
+maxi = np.max(gauss(xFiltered, *popt))
 mid = maxi/2
 
 
@@ -61,8 +85,8 @@ mhw = mid1-mid2
 print(mhw)
 
 fig1, xy = mpl.subplots(1)
-xy.plot(x, y, '.', mfc="dimgray", mec="dimgray", label="données expérimentales")
-xy.plot(x, gauss(x, *popt), 'k', label="courbe gaussienne « fittée »")
+xy.plot(xFiltered, yFiltered, '.', mfc="dimgray", mec="dimgray", label="données expérimentales")
+xy.plot(xFiltered, gauss(xFiltered, *popt), 'k', label="courbe gaussienne « fittée »")
 xy.arrow(0, mid-.125, 0, 0.1, color="silver", length_includes_head=True, width=.0005, head_length=.025)
 xy.plot([mid2, mid1], [mid]*2, color="silver", label="diamètre du faisceau laser")
 xy.annotate(f"{mhw:.3f} mm", [-0.003, 0.3])
@@ -71,5 +95,5 @@ xy.tick_params(axis="x", direction="in")
 xy.set_xlabel("Distance par rapport au centre d'un faisceau [mm]")
 xy.set_ylabel("Intensité lumineuse relative [-]")
 xy.legend()
-fig1.savefig("/Users/justinemajor/Documents/git/gph/design2/minimum.pdf")
-mpl.show()
+fig1.savefig("/Users/justinemajor/Documents/git/gph/design2/diameter3.pdf")
+# mpl.show()
