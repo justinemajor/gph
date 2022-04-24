@@ -12,6 +12,7 @@ bank = glob.glob("calibration/ir/*")
 for file in bank:
 	data = transfo.read(file)
 	data = transfo.transform(data['x'], data['y'])
+	data = transfo.cleanData(data['f'], data['A'])
 	transfo.graph(data['f'], data['A'])
 
 bank = glob.glob("calibration/visible/*")
@@ -19,6 +20,7 @@ bank = glob.glob("calibration/visible/*")
 for file in bank:
 	data = transfo.read(file)
 	data = transfo.transform(data['x'], data['y'])
+	data = transfo.cleanData(data['f'], data['A'])
 	transfo.graph(data['f'], data['A'])
 
 transfo.clear()
