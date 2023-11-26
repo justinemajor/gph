@@ -10,7 +10,7 @@ class Transfo:
 		self.dataBank = []
 
 	def setFileName(self, fileName:str):
-		self.fileName = fileName.strip("calibration").strip('.txt')
+		self.fileName = fileName.strip("calibration").strip('.txt').strip('tests')
 		return self.fileName
 
 	def clear(self):
@@ -54,20 +54,59 @@ class Transfo:
 		return {'f':restrictF, 'A':restrictA}
 
 	def principalPeak(self, f, A) -> float:
-		pic = np.argmax(restrictA)
-		pic = restrictF[pic]
+		pic = np.argmax(A)
+		pic = f[pic]
 		return pic
 
 	def graph(self, f, A, fileName=''):
 		if not fileName: fileName = self.fileName
 		plt.figure()
+		plt.tick_params(direction='in')
 		plt.plot(f, A)
+		plt.xlabel("Longueur d'onde [nm]")
+		plt.ylabel('Intensité relative [u.a.]')
 		plt.savefig(f'dataBank/{fileName}.pdf')
+		# plt.show()
 		plt.clf()
 		plt.close()
 
 	def collectData(self, A):
 		self.dataBank.append(A)
+
+	def lpf(self, A, filt):
+		"""Fourier transformation"""
+		fft = np.fft.fft(A)
+
+		"""Apply a "symmetrical" filter, either high-pass or low-pass"""
+		# Better when keeping the first point, because of a vertical translation/alignment
+		nCut = 400
+		tot = len(fft)
+		ff = filt  # frequency filter, which has a value of either "lpf" or "hpf"
+
+		if tot % 2 == 1:
+		    lmi = int((tot-1)/2)  # lowerMiddleIndex
+		    umi = lmi + 1  # upperMiddleIndex
+		else:
+		    lmi = int(tot/2)
+		    umi = lmi
+
+		"""For high-pass filter (HPF)"""
+		if ff == "hpf":
+		    fft[1:1+nCut] = np.zeros(nCut)
+		    fft[-nCut:] = np.zeros(nCut)  # symmetrical!
+
+		"""For low-pass filter (LPF)"""
+		if ff == "lpf":
+		    lowerLimit = lmi-nCut+1
+		    upperLimit = umi+nCut
+		    fft[lowerLimit:upperLimit] = np.zeros(len(fft[lowerLimit:upperLimit]))
+
+		if ff not in ["lpf", "hpf"]:
+		    raise ValueError("The value given to the frequency filter is not an option. Please choose between 'lpf' and 'hpf'.")
+
+		"""Reconstruct the spectrum with the filtered fft"""
+		dft = np.fft.ifft(fft)
+		return dft
 
 
 
